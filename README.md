@@ -2,10 +2,23 @@
 
 Assume `random()` returns a number between 0 and 1. `random(a, b)` returns a random number between a and b inclusive.
 
-- `bitmonID = sha256(father + mother)[:8]` - Random deterministic number from father and mother combined
+```python
+def breedVal(fVal: int, mVal: int, purity: int, minVal: int, maxVal: int):
+  rangeVals = (maxVal - minVal) / 20
+  return clamp(
+    round(
+      0.5 * fVal +
+      0.5 * mVal +
+      random.randint(
+        round(-purity / rangeVals),
+        round(purity / rangeVals))),
+    minVal, maxVal)
+```
+
+- `bitmonID = random() > 0.3 ? father.bitmonID : mother.bitmonID` - Random deterministic number from father and mother combined
   - also add child number for both mother and father
-- `fatherID = father.bitmonID`
-- `motherID = mother.bitmonID`
+- `fatherID = father.id`
+- `motherID = mother.id`
 - `gender = random() > 0.5`
 - `purity`
   - `p = (father.purity + mother.purity) / 2`
@@ -13,16 +26,16 @@ Assume `random()` returns a number between 0 and 1. `random(a, b)` returns a ran
     - `purity = max(p - p/10 - 1, 0)`
   - else
     - `purity = p`
-- `nature = max(min(50% * father.nature + 50% * mother.nature + random(-purity/10, +purity/10), 30), 0)`
+- `nature = breedVal(father.nature, mother.nature, purity, 0, 30)`
 - `variant`
   - special chance = 1% + 5% if father is special + 5% if mother is special
   - if father or mother is ugly: 5% chance of ugly
   - otherwise normal
-- `h = 50% * father.h + 50% * mother.h + random(-purity/4, purity/4)`
-- `a = 50% * father.a + 50% * mother.a + random(-purity/4, purity/4)`
-- `sa = 50% * father.sa + 50% * mother.sa + random(-purity/4, purity/4)`
-- `d = 50% * father.d + 50% * mother.d + random(-purity/4, purity/4)`
-- `sd = 50% * father.sd + 50% * mother.sd + random(-purity/4, purity/4)`
+- `h = breedVal(father.h, mother.h, childPurity, 0, 100)`
+- `a = breedVal(father.a, mother.a, childPurity, 0, 100)`
+- `sa = breedVal(father.sa, mother.sa, childPurity, 0, 100)`
+- `d = breedVal(father.d, mother.d, childPurity, 0, 100)`
+- `sd = breedVal(father.sd, mother.sd, childPurity, 0, 100)`
 
 ## Purity Distribution
 
